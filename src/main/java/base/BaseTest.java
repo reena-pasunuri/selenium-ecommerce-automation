@@ -1,39 +1,27 @@
 package base;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeSuite;
 import java.time.Duration;
 
 public class BaseTest {
     protected WebDriver driver;
-    protected WebDriverWait wait;
+
+    @BeforeSuite  // ✅ Ensures setup runs before all tests
+    public void beforeSuiteSetup() {
+        WebDriverManager.chromedriver().setup();  // ✅ Use WebDriverManager instead of System.setProperty
+    }
 
     @BeforeClass
-    @Parameters({"browser"})
-    public void setUp(@Optional("chrome") String browser) {
-        try {
-            if (browser.equalsIgnoreCase("chrome")) {
-                System.setProperty("webdriver.chrome.driver", "C:\\Selenium\\chromedriver.exe");
-
-                // Set Chrome options to prevent any unnecessary issues
-                ChromeOptions options = new ChromeOptions();
-                options.addArguments("--start-maximized");
-                options.addArguments("--disable-notifications");
-
-                driver = new ChromeDriver(options);
-            } else {
-                throw new IllegalArgumentException("Browser not supported: " + browser);
-            }
-
-            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-            wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-            driver.get("https://rahulshettyacademy.com/seleniumPractise/#/");
-        } catch (Exception e) {
-            System.out.println("Error initializing browser: " + e.getMessage());
-        }
+    public void setUp() {
+        driver = new ChromeDriver();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        driver.manage().window().maximize();
+        driver.get("https://rahulshettyacademy.com/seleniumPractise/#/");
     }
 
     @AfterClass

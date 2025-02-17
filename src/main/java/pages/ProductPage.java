@@ -3,46 +3,36 @@ package pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import java.time.Duration;
 
 public class ProductPage {
     WebDriver driver;
+    WebDriverWait wait;
 
-    By productSearchBox = By.xpath("//input[@type='search']");
-    By addToCartButton = By.xpath("//button[contains(text(),'ADD TO CART')]");
-    By productName = By.xpath("//h4[@class='product-name']");
-
+    // Constructor
     public ProductPage(WebDriver driver) {
         this.driver = driver;
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
+    // Locators
+    private By searchBox = By.cssSelector("input.search-keyword");
+    private By productName = By.cssSelector("h4.product-name");
+    private By addToCartButton = By.xpath("//button[text()='ADD TO CART']");
+
+    // Search for a product
     public void searchProduct(String productName) {
-        try {
-            WebElement searchBox = driver.findElement(productSearchBox);
-            searchBox.clear();
-            searchBox.sendKeys(productName);
-        } catch (Exception e) {
-            System.out.println("Error searching product: " + e.getMessage());
-        }
+        WebElement searchBoxElement = wait.until(ExpectedConditions.visibilityOfElementLocated(searchBox));
+        searchBoxElement.clear();
+        searchBoxElement.sendKeys(productName);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(this.productName)); // Wait for results to appear
     }
 
+    // Click Add to Cart
     public void addProductToCart() {
-        try {
-            driver.findElement(addToCartButton).click();
-        } catch (Exception e) {
-            System.out.println("Error adding product to cart: " + e.getMessage());
-        }
-    }
-
-    public String getProductName() {
-        try {
-            return driver.findElement(productName).getText();
-        } catch (Exception e) {
-            System.out.println("Error getting product name: " + e.getMessage());
-            return null;
-        }
-    }
-
-    public void goToCartAndCheckout() {
-        throw new UnsupportedOperationException("Unimplemented method 'goToCartAndCheckout'");
+        WebElement addToCart = wait.until(ExpectedConditions.elementToBeClickable(addToCartButton));
+        addToCart.click();
     }
 }

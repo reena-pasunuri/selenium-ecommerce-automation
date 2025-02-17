@@ -2,24 +2,38 @@ package pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import java.time.Duration;
 
 public class HomePage {
-    WebDriver driver;
+    private WebDriver driver;
+    private WebDriverWait wait;
 
-    By searchBox = By.xpath("//input[@type='search']");
-    By searchButton = By.xpath("//button[@type='submit']");
-
+    // Constructor
     public HomePage(WebDriver driver) {
         this.driver = driver;
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
-    public void searchProduct(String productName) {
-        driver.findElement(searchBox).clear();
-        driver.findElement(searchBox).sendKeys(productName);
-        driver.findElement(searchButton).click();
+    // Locators
+    private By searchBox = By.xpath("//input[@type='search']");
+    private By cartIcon = By.cssSelector("img[alt='Cart']");
+    private By homePageLogo = By.xpath("//div[@class='brand greenLogo']");
+
+    // Open the GreenKart homepage
+    public void openHomePage() {
+        driver.get("https://rahulshettyacademy.com/seleniumPractise/#/");
+        wait.until(ExpectedConditions.visibilityOfElementLocated(homePageLogo));
     }
 
-    public String getTitle() {
-        return driver.getTitle();
+    // Verify if homepage is loaded
+    public boolean isHomePageLoaded() {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(homePageLogo)).isDisplayed();
+    }
+
+    // Go to Cart Page
+    public void goToCart() {
+        wait.until(ExpectedConditions.elementToBeClickable(cartIcon)).click();
     }
 }

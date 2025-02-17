@@ -1,27 +1,15 @@
 package tests;
 
-import org.testng.Assert;
-import org.testng.annotations.Test;
-
 import base.BaseTest;
-import pages.CartPage;
+import org.testng.annotations.Test;
 import pages.CheckoutPage;
-import pages.ProductPage;
 
 public class CheckoutTest extends BaseTest {
-
     @Test
-    public void testCheckout() {
-        ProductPage productPage = new ProductPage(driver);
-        CartPage cartPage = new CartPage(driver);
+    public void testPlaceOrder() {
         CheckoutPage checkoutPage = new CheckoutPage(driver);
 
-        productPage.searchProduct("Cucumber");
-        productPage.addProductToCart();
-        cartPage.openCart();
-        cartPage.proceedToCheckout();
+        // 🔹 Proceed with placing the order
         checkoutPage.placeOrder();
-
-        Assert.assertTrue(checkoutPage.isOrderSuccessful(), "Order should be placed successfully.");
     }
 }

@@ -3,42 +3,33 @@ package pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import java.util.List;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import java.time.Duration;
 
 public class CartPage {
     WebDriver driver;
+    WebDriverWait wait;
 
-    By cartIcon = By.xpath("//img[@alt='Cart']");
-    By cartItems = By.xpath("//div[@class='cart-preview']//ul//li");
-    By checkoutButton = By.xpath("//button[contains(text(),'PROCEED TO CHECKOUT')]");
-    
     public CartPage(WebDriver driver) {
         this.driver = driver;
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10)); // ✅ Fixed missing WebDriverWait
     }
 
+    // Open the cart
     public void openCart() {
-        try {
-            driver.findElement(cartIcon).click();
-        } catch (Exception e) {
-            System.out.println("Error opening cart: " + e.getMessage());
-        }
+        wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("img[alt='Cart']"))).click();
     }
 
-    public boolean isCartEmpty() {
-        try {
-            List<WebElement> items = driver.findElements(cartItems);
-            return items.isEmpty();
-        } catch (Exception e) {
-            System.out.println("Error checking cart: " + e.getMessage());
-            return false;
-        }
-    }
-
+    // Proceed to checkout
     public void proceedToCheckout() {
-        try {
-            driver.findElement(checkoutButton).click();
-        } catch (Exception e) {
-            System.out.println("Error proceeding to checkout: " + e.getMessage());
-        }
+        wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(text(),'PROCEED TO CHECKOUT')]"))).click();
+    }
+
+    // Get product name in cart
+    public String getProductName() {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(
+            By.cssSelector("div.cart-preview.active li.cart-item p.product-name")
+        )).getText();
     }
 }

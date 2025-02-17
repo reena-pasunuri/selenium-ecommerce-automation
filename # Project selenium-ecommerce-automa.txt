@@ -1,0 +1,12 @@
+ # **Project: selenium-ecommerce-automation
+
+TestNG-based Hybrid Framework for Selenium automation. 
+
+This framework includes:
+Page Object Model (POM) for better test maintainability and reusability.
+Maven for dependency management and build automation.
+TestNG as the test runner and reporting tool.
+Excel-based Data-Driven Testing for parameterizing test data.
+Utility Classes for configurations, test data handling, and logging.
+Assertions (TestNG) for validating test results.
+WebDriverManager for handling browser drivers dynamically.

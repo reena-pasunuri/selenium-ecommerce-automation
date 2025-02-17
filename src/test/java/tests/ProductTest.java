@@ -1,21 +1,29 @@
 package tests;
 
 import base.BaseTest;
+import org.testng.Assert;
 import org.testng.annotations.Test;
-import pages.ProductPage;
-import pages.CheckoutPage;
+import pages.CartPage;
+import pages.SearchPage;
 
 public class ProductTest extends BaseTest {
-
     @Test
-    public void testAddProductAndCheckout() {
-        ProductPage productPage = new ProductPage(driver);
-        productPage.searchProduct("Cucumber");
-        productPage.addProductToCart();
-        productPage.goToCartAndCheckout();
+    public void testAddProductToCart() {
+        SearchPage searchPage = new SearchPage(driver);
+        CartPage cartPage = new CartPage(driver);
 
-        CheckoutPage checkoutPage = new CheckoutPage(driver);
-        checkoutPage.enterPromoCode("RAHULSHETTYACADEMY");
-        checkoutPage.placeOrder();
+        String productName = "Cucumber";  // ✅ Provide product name
+
+        // 🔹 Step 1: Search for product
+        searchPage.searchProduct(productName);
+
+        // 🔹 Step 2: Add the first found product to the cart
+        searchPage.addFirstProductToCart();
+
+        // 🔹 Step 3: Open cart
+        cartPage.openCart();
+
+        // 🔹 Step 4: Verify product is in cart
+        Assert.assertTrue(cartPage.getProductName().contains(productName), "Product not found in cart!");
     }
 }
